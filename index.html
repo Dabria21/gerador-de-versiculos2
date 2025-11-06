@@ -4,14 +4,184 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador de Versículos</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #e6f0ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #2b65ec;
+      color: white;
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 1.8em;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    main {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    button {
+      background-color: #2b65ec;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .versiculo {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-style: italic;
+      color: #333;
+      background-color: #ffffff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .abinha {
+      display: none;
+      margin-top: 20px;
+      background-color: #cce0ff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 500px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .abinha span {
+      font-weight: bold;
+      color: #003366;
+    }
+
+    .copy-btn {
+      background-color: #003366;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background-color 0.3s;
+    }
+
+    .copy-btn:hover {
+      background-color: #001f4d;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>📖 Gerador de Versículos</h1>
-    <p id="versiculo">Clique no botão para receber uma mensagem bíblica 🙏</p>
+  <header>Igreja Batista Independente</header>
+
+  <main>
     <button onclick="gerarVersiculo()">Gerar Versículo</button>
-  </div>
-  <script src="script.js"></script>
+    <div class="versiculo" id="versiculo"></div>
+
+    <div class="abinha" id="abinha">
+      <span>Venha adorar conosco! Culto Domingo às 19:00 horas</span>
+      <button class="copy-btn" onclick="copiarVersiculo()">Copiar Versículo</button>
+    </div>
+  </main>
+
+  <script>
+    const versiculos = [
+      "O Senhor é o meu pastor; nada me faltará. – Salmos 23:1",
+      "Tudo posso naquele que me fortalece. – Filipenses 4:13",
+      "Entrega o teu caminho ao Senhor; confia nele, e ele o fará. – Salmos 37:5",
+      "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito. – João 3:16",
+      "O Senhor é a minha luz e a minha salvação; a quem temerei? – Salmos 27:1",
+      "Em tudo dai graças. – 1 Tessalonicenses 5:18",
+      "1 João 4:8 – Aquele que não ama não conhece a Deus, porque Deus é amor.",
+      "Romanos 5:8 – Mas Deus prova o seu amor para conosco, em que Cristo morreu por nós, sendo nós ainda pecadores.",
+      "1 João 4:19 – Nós amamos porque Ele nos amou primeiro.",
+      "1 Coríntios 13:4-5 – O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha.",
+      "Efésios 4:2 – Sejam completamente humildes e dóceis, e sejam pacientes, suportando uns aos outros com amor.",
+      "João 15:12 – O meu mandamento é este: amem-se uns aos outros como eu os amei.",
+      "Colossenses 3:14 – Acima de tudo, porém, revistam-se do amor, que é o elo perfeito.",
+      "Provérbios 17:17 – O amigo ama em todos os momentos; é um irmão na adversidade.",
+      "Romanos 13:10 – O amor não faz mal ao próximo. De sorte que o cumprimento da lei é o amor.",
+      "1 Pedro 4:8 – Acima de tudo, amem-se sinceramente uns aos outros, porque o amor perdoa muitos pecados.",
+      "João 13:35 – Nisto todos conhecerão que sois meus discípulos: se tiverdes amor uns pelos outros.",
+      "Salmos 36:7 – Como é precioso o teu amor, ó Deus! Os homens encontram refúgio à sombra das tuas asas.",
+      "Jeremias 29:11 – Porque eu bem sei os planos que tenho para vocês, diz o Senhor; planos de paz e não de mal.",
+      "Romanos 15:13 – O Deus da esperança os encha de toda alegria e paz, por sua confiança nele.",
+      "Salmos 42:11 – Por que estás abatida, ó minha alma? Espera em Deus, pois ainda o louvarei.",
+      "Isaías 40:31 – Mas os que esperam no Senhor renovarão as suas forças.",
+      "Lamentações 3:25 – Bom é o Senhor para os que esperam nele, para a alma que o busca.",
+      "Romanos 8:25 – Mas, se esperamos o que ainda não vemos, aguardamo-lo pacientemente.",
+      "Salmos 71:5 – Pois tu és a minha esperança, ó Senhor Deus, a minha confiança desde a juventude.",
+      "1 Pedro 1:3 – Bendito seja Deus, que nos regenerou para uma viva esperança pela ressurreição de Jesus Cristo.",
+      "Hebreus 10:23 – Guardemos firme a confissão da esperança, sem vacilar, pois fiel é o que prometeu.",
+      "Salmos 31:24 – Sejam fortes e corajosos, todos vocês que esperam no Senhor!",
+      "Romanos 12:12 – Alegrem-se na esperança, sejam pacientes na tribulação e perseverem na oração.",
+      "Provérbios 23:18 – Com certeza haverá bom futuro; não será frustrada a sua esperança.",
+      "Salmos 130:5 – Aguardo o Senhor; a minha alma o aguarda, e espero na sua palavra.",
+      "Filipenses 4:7 – E a paz de Deus, que excede todo entendimento, guardará os vossos corações.",
+      "João 14:27 – Deixo-lhes a paz; a minha paz lhes dou. Não se perturbem os seus corações.",
+      "Isaías 26:3 – Tu conservarás em perfeita paz aquele cuja mente está firme em ti.",
+      "Salmos 29:11 – O Senhor dá força ao seu povo; o Senhor abençoa o seu povo com paz.",
+      "Romanos 12:18 – Se possível, quanto depender de vocês, vivam em paz com todos.",
+      "Colossenses 3:15 – Que a paz de Cristo domine em seus corações.",
+      "Salmos 34:14 – Afaste-se do mal e faça o bem; busque a paz e siga-a.",
+      "Mateus 5:9 – Bem-aventurados os pacificadores, pois serão chamados filhos de Deus.",
+      "Provérbios 16:7 – Quando o Senhor se agrada dos caminhos de alguém, faz até que seus inimigos vivam em paz com ele.",
+      "Romanos 8:6 – A mentalidade da carne é morte, mas a mentalidade do Espírito é vida e paz.",
+      "2 Tessalonicenses 3:16 – O próprio Senhor da paz lhes dê continuamente a paz em toda e qualquer situação.",
+      "Salmos 119:165 – Grande paz têm os que amam a tua lei; para eles não há tropeço.",
+      "Salmos 16:11 – Na tua presença há plenitude de alegria.",
+      "Filipenses 4:4 – Alegrem-se sempre no Senhor. Novamente direi: alegrem-se!",
+      "Salmos 118:24 – Este é o dia que o Senhor fez; regozijemo-nos e alegremo-nos nele.",
+      "João 16:22 – A vossa alegria ninguém vos poderá tirar.",
+      "Neemias 8:10 – A alegria do Senhor é a vossa força.",
+      "Romanos 14:17 – O Reino de Deus é justiça, paz e alegria no Espírito Santo.",
+      "Salmos 30:5 – O choro pode durar uma noite, mas a alegria vem pela manhã.",
+      "1 Tessalonicenses 5:16 – Alegrem-se sempre.",
+      "Salmos 32:11 – Alegrem-se no Senhor e exultem, vocês que são justos!",
+      "Isaías 55:12 – Vocês sairão com alegria e serão conduzidos em paz.",
+      "João 15:11 – Tenho lhes dito estas coisas para que a minha alegria esteja em vocês e a alegria de vocês seja completa.",
+      "Salmos 97:11 – A luz nasce para os justos, e a alegria para os retos de coração."
+    ];
+
+    function gerarVersiculo() {
+      const randomIndex = Math.floor(Math.random() * versiculos.length);
+      const versiculoTexto = versiculos[randomIndex];
+      document.getElementById('versiculo').textContent = versiculoTexto;
+      document.getElementById('abinha').style.display = 'flex';
+    }
+
+    function copiarVersiculo() {
+      const texto = document.getElementById('versiculo').textContent;
+      navigator.clipboard.writeText(texto).then(() => {
+        alert("Versículo copiado com sucesso!");
+      });
+    }
+  </script>
 </body>
 </html>
