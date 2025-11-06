@@ -30,6 +30,34 @@
     main {
       margin-top: 40px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .versiculo {
+      font-size: 1.2em;
+      font-style: italic;
+      color: #333;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .botoes {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
     }
 
     button {
@@ -47,66 +75,34 @@
       background-color: #1d4ed8;
     }
 
-    .versiculo {
-      margin-top: 20px;
-      font-size: 1.2em;
-      font-style: italic;
-      color: #333;
-      background-color: #ffffff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      width: 80%;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
     .abinha {
       display: none;
-      margin-top: 20px;
       background-color: #cce0ff;
       padding: 15px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       width: 80%;
       max-width: 500px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .abinha span {
+      text-align: center;
       font-weight: bold;
       color: #003366;
     }
 
-    .copy-btn {
-      background-color: #003366;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9em;
-      transition: background-color 0.3s;
-    }
-
-    .copy-btn:hover {
-      background-color: #001f4d;
-    }
   </style>
 </head>
 <body>
   <header>Igreja Batista Independente</header>
 
   <main>
-    <button onclick="gerarVersiculo()">Gerar Versículo</button>
-    <div class="versiculo" id="versiculo"></div>
+    <div class="versiculo" id="versiculo">Clique no botão e gere seu versículo</div>
+
+    <div class="botoes">
+      <button id="gerarBtn" onclick="gerarVersiculo()">Gerar Versículo</button>
+      <button id="copiarBtn" onclick="copiarVersiculo()" style="display:none;">Copiar Versículo</button>
+    </div>
 
     <div class="abinha" id="abinha">
-      <span>Venha adorar conosco! Culto Domingo às 19:00 horas</span>
-      <button class="copy-btn" onclick="copiarVersiculo()">Copiar Versículo</button>
+      Venha adorar conosco! Culto Domingo às 19:00 horas
     </div>
   </main>
 
@@ -172,8 +168,13 @@
     function gerarVersiculo() {
       const randomIndex = Math.floor(Math.random() * versiculos.length);
       const versiculoTexto = versiculos[randomIndex];
-      document.getElementById('versiculo').textContent = versiculoTexto;
-      document.getElementById('abinha').style.display = 'flex';
+      const versiculoEl = document.getElementById('versiculo');
+      const abinhaEl = document.getElementById('abinha');
+      const copiarBtn = document.getElementById('copiarBtn');
+
+      versiculoEl.textContent = versiculoTexto;
+      abinhaEl.style.display = 'block';
+      copiarBtn.style.display = 'inline-block';
     }
 
     function copiarVersiculo() {
